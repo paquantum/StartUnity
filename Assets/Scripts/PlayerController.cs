@@ -20,9 +20,13 @@ public class PlayerController : MonoBehaviour
     private float jumpForce;
 
     // 상태 변수
+    private bool isWalk = false;
     private bool isRun = false;
     private bool isCrouch = false;
     private bool isGround = true; // true일 때만 점프 가능
+
+    // 움직임 체크 변수,, 전 프레임의 플래이어 현재 위치
+    private Vector3 lastPos;
 
     // 앚았을 때 얼마나 앚을지 결정하는 변수
     [SerializeField]
@@ -47,16 +51,18 @@ public class PlayerController : MonoBehaviour
     private Camera theCamera;
     private Rigidbody myRigid; // Rigidbody는 인간의 몸과 유사
     private GunController theGunController;
+    private Crosshair theCrosshair;
 
     // Start is called before the first frame update
     void Start()
     {
         capsuleCollider = GetComponent<CapsuleCollider>();
         myRigid = GetComponent<Rigidbody>();
-        applySpeed = walkSpeed;
         theGunController = FindObjectOfType<GunController>();
+        theCrosshair = FindObjectOfType<Crosshair>();
 
         // 초기화
+        applySpeed = walkSpeed;
         originPosY = theCamera.transform.localPosition.y;
         applyCrouchPosY = originPosY;
     }
@@ -69,6 +75,7 @@ public class PlayerController : MonoBehaviour
         TryRun(); // 뛰는지 걷는지 판단 하고 Move()를 할거라 Move() 위에 있어야 함
         TryCrouch();
         Move();
+        MoveCheck();
         CameraRotation();
         CharacterRotation();
     }
@@ -86,6 +93,7 @@ public class PlayerController : MonoBehaviour
     private void Crouch()
     {
         isCrouch = !isCrouch;
+        theCrosshair.CrouchingAnimation(isCrouch);
 
         if (isCrouch)
         {
@@ -168,13 +176,15 @@ public class PlayerController : MonoBehaviour
         theGunController.CancelFineSight();
 
         isRun = true;
+        theCrosshair.RunningAnimation(isRun);
         applySpeed = runSpeed;
     }
 
-    // 달리기 실행
+    // 달리기 취소
     private void RunningCancel()
     {
         isRun = false;
+        theCrosshair.RunningAnimation(isRun);
         applySpeed = walkSpeed;
     }
 
@@ -199,6 +209,22 @@ public class PlayerController : MonoBehaviour
         // 약 1초 60번 프레임 동안 적절하게 움직이도록
         // Time.deltaTime의 값은 약 0.016
         myRigid.MovePosition(transform.position + _velocity * Time.deltaTime);
+    }
+
+    private void MoveCheck()
+    {
+        if (!isRun && !isCrouch)
+        {
+            // 원래 lastPos != transform.position에서 vector로 바꾼건
+            // 경사면등 0.000001.. 위치가 미끄려져도 걷는걸로 판단하면 안돼서
+            if (Vector3.Distance(lastPos, transform.position) >= 0.01f)
+                isWalk = true;
+            else
+                isWalk = false;
+
+            theCrosshair.WalkingAnimation(isWalk);
+            lastPos = transform.position;
+        }
     }
 
     // 좌우 캐릭터 회전
