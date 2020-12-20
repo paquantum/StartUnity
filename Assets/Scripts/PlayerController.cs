@@ -133,6 +133,7 @@ public class PlayerController : MonoBehaviour
     {
         // 캡슐콜라이더의 바운드 경계를 따라 extends.y는 y사이즈에서 절반을 down 아래로 쏨,, 0.1f는 경사면에서 위치오류로 여유를 주기 위해?
         isGround = Physics.Raycast(transform.position, Vector3.down, capsuleCollider.bounds.extents.y + 0.1f);
+        theCrosshair.RunningAnimation(!isGround);
     }
 
     // 점프 시도
@@ -213,7 +214,7 @@ public class PlayerController : MonoBehaviour
 
     private void MoveCheck()
     {
-        if (!isRun && !isCrouch)
+        if (!isRun && !isCrouch && isGround)
         {
             // 원래 lastPos != transform.position에서 vector로 바꾼건
             // 경사면등 0.000001.. 위치가 미끄려져도 걷는걸로 판단하면 안돼서
