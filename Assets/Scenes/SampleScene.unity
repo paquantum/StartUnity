@@ -571,6 +571,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 1358660186}
   go_crosshairHUD: {fileID: 1358660184}
+  theGunController: {fileID: 1154585633}
 --- !u!1 &586647572
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,7 +695,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunName: SubMachineGun1
   range: 100
-  accuracy: 0
+  accuracy: 0.01
   fireRate: 0.1
   reloadTime: 2
   damage: 30
@@ -704,7 +705,7 @@ MonoBehaviour:
   carryBulletCount: 150
   retroActionForce: 0.3
   retroActionFineSigntForce: 0.7
-  fineSightOriginPos: {x: 0.3, y: 0.27, z: -0.66}
+  fineSightOriginPos: {x: 0.64, y: 0.33, z: -0.584}
   anim: {fileID: 594896496}
   muzzleFlash: {fileID: 1371259370}
   fire_Sound: {fileID: 8300000, guid: 81f8df794db3f5e4a98ce7de7c43215c, type: 3}
@@ -832,7 +833,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 739626546}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.08, y: -0, z: -0.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1371259368}

@@ -122,6 +122,15 @@ public class GunController : MonoBehaviour
         }
     }
 
+    public void CancelReload()
+    {
+        if (isReload)
+        {
+            StopAllCoroutines();
+            isReload = false;
+        }
+    }
+
     // 재장전
     IEnumerator ReloadCoroutine()
     {
@@ -273,5 +282,18 @@ public class GunController : MonoBehaviour
     public bool GetFineSightMode()
     {
         return isFineSightMode;
+    }
+
+    public void GunChange(Gun _gun)
+    {
+        if (WeaponManager.currentWeapon != null)
+        {
+            WeaponManager.currentWeapon.gameObject.SetActive(false);
+        }
+        currentGun = _gun;
+        
+        // 다른 걸로 바꿨다가 총으로 돌아왔을 때 다른 위치에 있을 수 있어서? 0으로 초기화
+        currentGun.transform.localPosition = Vector3.zero;
+        currentGun.gameObject.SetActive(true);
     }
 }
