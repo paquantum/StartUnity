@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviour
     {
         // 캡슐콜라이더의 바운드 경계를 따라 extends.y는 y사이즈에서 절반을 down 아래로 쏨,, 0.1f는 경사면에서 위치오류로 여유를 주기 위해?
         isGround = Physics.Raycast(transform.position, Vector3.down, capsuleCollider.bounds.extents.y + 0.1f);
-        theCrosshair.RunningAnimation(!isGround);
+        theCrosshair.JumpingAnimation(!isGround);
     }
 
     // 점프 시도

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class HandController : MonoBehaviour
 {
+    // 활성화 여부
+    public static bool isActivate = false;
+
     // 현재 장창된 Hand형 타입 무기
     [SerializeField]
     private Hand currentHand;
@@ -18,7 +21,8 @@ public class HandController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        TryAttack();
+        if (isActivate)
+            TryAttack();
     }
 
     private void TryAttack()
@@ -76,5 +80,21 @@ public class HandController : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void HandChange(Hand _hand)
+    {
+        if (WeaponManager.currentWeapon != null)
+        {
+            WeaponManager.currentWeapon.gameObject.SetActive(false);
+        }
+        currentHand = _hand;
+        WeaponManager.currentWeapon = currentHand.GetComponent<Transform>();
+        WeaponManager.currentWeaponAnim = currentHand.anim;
+
+        // 다른 걸로 바꿨다가 총으로 돌아왔을 때 다른 위치에 있을 수 있어서? 0으로 초기화
+        currentHand.transform.localPosition = Vector3.zero;
+        currentHand.gameObject.SetActive(true);
+        isActivate = true;
     }
 }

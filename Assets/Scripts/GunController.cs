@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GunController : MonoBehaviour
 {
+    // 활성화 여부
+    public static bool isActivate = true;
+
     // 현재 장착된 총
     [SerializeField]
     private Gun currentGun;
@@ -15,7 +18,7 @@ public class GunController : MonoBehaviour
     private bool isReload = false; // false일때만 발사
     [HideInInspector]
     public bool isFineSightMode = false; // false는 기본 true는 정조준 상태
-
+    
     // 본래 포지션 값
     private Vector3 originPos;
 
@@ -39,15 +42,21 @@ public class GunController : MonoBehaviour
         originPos = Vector3.zero;
         audioSource = GetComponent<AudioSource>();
         theCrosshair = FindObjectOfType<Crosshair>();
+
+        WeaponManager.currentWeapon = currentGun.GetComponent<Transform>();
+        WeaponManager.currentWeaponAnim = currentGun.anim;
     }
 
     // Update is called once per frame
     void Update()
     {
-        GunFireRateCalc();
-        TryFire();
-        TryReload();
-        TryFineSight();
+        if (isActivate)
+        {
+            GunFireRateCalc();
+            TryFire();
+            TryReload();
+            TryFineSight();
+        }
     }
 
     // 연사속도 재계산
@@ -291,9 +300,12 @@ public class GunController : MonoBehaviour
             WeaponManager.currentWeapon.gameObject.SetActive(false);
         }
         currentGun = _gun;
+        WeaponManager.currentWeapon = currentGun.GetComponent<Transform>();
+        WeaponManager.currentWeaponAnim = currentGun.anim;
         
         // 다른 걸로 바꿨다가 총으로 돌아왔을 때 다른 위치에 있을 수 있어서? 0으로 초기화
         currentGun.transform.localPosition = Vector3.zero;
         currentGun.gameObject.SetActive(true);
+        isActivate = true;
     }
 }

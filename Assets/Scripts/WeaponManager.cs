@@ -59,14 +59,11 @@ public class WeaponManager : MonoBehaviour
         {
             // 무기 교체 실행 (서브머신건)
             if (Input.GetKeyDown(KeyCode.Alpha1)) // Alpha1은 숫자 1
-            {
-
-            }
+                StartCoroutine(ChangeWeaponCoroutine("HAND", "맨손"));
             // 무기 교체 실행 (맨손)
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+                StartCoroutine(ChangeWeaponCoroutine("GUN", "SubMachineGun1"));
 
-            }
         }
     }
 
@@ -78,7 +75,12 @@ public class WeaponManager : MonoBehaviour
         yield return new WaitForSeconds(changeWeaponDelayTime);
 
         CancelPreWeaponAction();
-        WeaponChange();
+        WeaponChange(_type, _name);
+
+        yield return new WaitForSeconds(changeWeaponEndDelayTime);
+
+        currentWeaponType = _type;
+        isChangeWeapon = false;
     }
 
     private void CancelPreWeaponAction()
@@ -88,8 +90,10 @@ public class WeaponManager : MonoBehaviour
             case "GUN":
                 theGunController.CancelFineSight();
                 theGunController.CancelReload();
+                GunController.isActivate = false;
                 break;
             case "HAND":
+                HandController.isActivate = false;
                 break;
         }
     }
@@ -97,12 +101,8 @@ public class WeaponManager : MonoBehaviour
     private void WeaponChange(string _type, string _name)
     {
         if (_type == "GUN")
-        {
             theGunController.GunChange(gunDictionary[_name]);
-        }
         else if (_type == "HAND")
-        {
-
-        }
+            theHandController.HandChange(handDictionary[_name]);
     }
 }
