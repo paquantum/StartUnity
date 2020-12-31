@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
         //theCamera.transform.localPosition = new Vector3(theCamera.transform.localPosition.x, applyCrouchPosY, theCamera.transform.localPosition.z);
         // 부자연스러움으로 Coroutine를 쓰기위해 주석처리후 StartCoroutine 사용
     }
-    
+
     // 부드러운 앉기 동작 실행
     // 병렬 처리로 만들기 위해 있는게 coroutine 
     IEnumerator CrouchCoroutine()
@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviour
     {
         // 캡슐콜라이더의 바운드 경계를 따라 extends.y는 y사이즈에서 절반을 down 아래로 쏨,, 0.1f는 경사면에서 위치오류로 여유를 주기 위해?
         isGround = Physics.Raycast(transform.position, Vector3.down, capsuleCollider.bounds.extents.y + 0.1f);
-        theCrosshair.RunningAnimation(!isGround);
+        theCrosshair.JumpingAnimation(!isGround);
     }
 
     // 점프 시도
@@ -235,7 +235,7 @@ public class PlayerController : MonoBehaviour
         Vector3 _characterRotationY = new Vector3(0f, _yRotation, 0f) * lookSensitivity;
         myRigid.MoveRotation(myRigid.rotation * Quaternion.Euler(_characterRotationY));
     }
-    
+
     // 상하 카메라 회전
     private void CameraRotation()
     {
